@@ -8,7 +8,7 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - checkout
+      - checkout:
           path: decoITS
       - run:
           name: Fetch dependencies
