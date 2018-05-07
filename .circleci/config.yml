@@ -11,6 +11,14 @@ jobs:
     steps:
       - checkout:
           path: decoITS
+      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: /tmp
+          # Must be relative path from root
+          paths:
+            - decoITS
 
   build:
     <<: *defaults
@@ -25,14 +33,6 @@ jobs:
           name: Build
           # Stopped using msbuild due to issues with copying NuGet dependencies into test projects
           command: xbuild
-      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-          # taken to be the root directory of the workspace.
-          root: /tmp
-          # Must be relative path from root
-          paths:
-            - decoITS
 
   test:
     <<: *defaults
