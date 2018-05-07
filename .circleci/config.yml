@@ -1,15 +1,19 @@
 defaults: &defaults
-  working_directory: /tmp
+  working_directory: /tmp/decoITS
   docker:
     - image: ribakov/workspace:2017.3.0p2
 
 version: 2
 jobs:
-  build:
+  checkout_code:
     <<: *defaults
+    working_directory: /tmp
     steps:
       - checkout:
           path: decoITS
+
+  build:
+    <<: *defaults
       - run:
           name: Fetch dependencies
           command: nuget restore SolucionTutor.sln
@@ -44,7 +48,10 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - checkout_code
+      - build:
+        requires:
+            - checkout_code
       - test:
           requires:
             - build
