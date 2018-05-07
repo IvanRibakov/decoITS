@@ -9,6 +9,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+          path: decoITS
       - run:
           name: Fetch dependencies
           command: nuget restore SolucionTutor.sln
