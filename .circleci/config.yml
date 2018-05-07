@@ -14,6 +14,10 @@ jobs:
 
   build:
     <<: *defaults
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp
       - run:
           name: Fetch dependencies
           command: nuget restore SolucionTutor.sln
