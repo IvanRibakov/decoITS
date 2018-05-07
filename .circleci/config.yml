@@ -41,10 +41,10 @@ jobs:
           at: /tmp
       - run:
           name: Test Reactive Tutor
-          command: nunit3-console decoITS/TutoringModule/ReactiveTutor/Its.TutoringModule.ReactiveTutorTest/bin/Debug/Its.TutoringModule.ReactiveTutorTest.dll --noresult
+          command: nunit3-console ./TutoringModule/ReactiveTutor/Its.TutoringModule.ReactiveTutorTest/bin/Debug/Its.TutoringModule.ReactiveTutorTest.dll --noresult
       - run:
           name: Test Collective Model Tutor
-          command: nunit3-console decoITS/TutoringModule/CollectiveModelTutor/Its.TutoringModule.CMTutorTest/bin/Debug/Its.TutoringModule.CMTutorTest.dll --noresult
+          command: nunit3-console ./TutoringModule/CollectiveModelTutor/Its.TutoringModule.CMTutorTest/bin/Debug/Its.TutoringModule.CMTutorTest.dll --noresult
 
 
 workflows:
