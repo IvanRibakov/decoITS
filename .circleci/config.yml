@@ -35,6 +35,7 @@ jobs:
 
   test:
     <<: *defaults
+    parallelism: 2
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
