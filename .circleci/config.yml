@@ -1,8 +1,12 @@
+defaults: &defaults
+  working_directory: /tmp
+  docker:
+    - image: ribakov/workspace:2017.3.0p2
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: ribakov/workspace:2017.3.0p2
+    <<: *defaults
     steps:
       - checkout
       - run:
@@ -12,9 +16,34 @@ jobs:
           name: Build
           # Stopped using msbuild due to issues with copying NuGet dependencies into test projects
           command: xbuild
+      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: /tmp
+          # Must be relative path from root
+          paths:
+            - decoITS
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp
       - run:
           name: Test Reactive Tutor
-          command: nunit3-console ./TutoringModule/ReactiveTutor/Its.TutoringModule.ReactiveTutorTest/bin/Debug/Its.TutoringModule.ReactiveTutorTest.dll --noresult
+          command: nunit3-console decoITS/TutoringModule/ReactiveTutor/Its.TutoringModule.ReactiveTutorTest/bin/Debug/Its.TutoringModule.ReactiveTutorTest.dll --noresult
       - run:
           name: Test Collective Model Tutor
-          command: nunit3-console ./TutoringModule/CollectiveModelTutor/Its.TutoringModule.CMTutorTest/bin/Debug/Its.TutoringModule.CMTutorTest.dll --noresult
+          command: nunit3-console decoITS/TutoringModule/CollectiveModelTutor/Its.TutoringModule.CMTutorTest/bin/Debug/Its.TutoringModule.CMTutorTest.dll --noresult
+
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
