@@ -54,7 +54,7 @@ workflows:
     jobs:
       - checkout_code
       - build:
-        requires:
+          requires:
             - checkout_code
       - test:
           requires:
